@@ -32,10 +32,12 @@ public:
     unsigned int getAge() const;
     unsigned int getFonds() const;
     std::vector<const Jeu*>& getJeux();
-
-    Q_SLOTS acheterJeu(const Jeu* jeu);
+    
+public slots:
+    void acheterJeu(const Jeu* jeu);
     void vendreJeu(const Jeu* jeu);
 
+signals:
     void fondsModifier(unsigned int nouveauFonds);
 
 private:
