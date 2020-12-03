@@ -1,0 +1,34 @@
+"Kerbal Space Program" 1200
+"Fortnite" 0
+"GTA5" 4000
+"Fall Guys" 2200
+"Skyrim" 60
+"Red Dead Redemption 2" 80
+"Fallout 3" 25
+"Genshin Impact" 20
+"FF14" 30
+"Path of exile" 0
+"World of warcraft" 500
+"Civillization V" 50
+"Borderlands 3" 60
+"Stardew valley" 10
+"NekoPara vol. 0" 5
+"NekoPara vol. 1" 5
+"NekoPara vol. 2" 5
+"NekoPara vol. 3" 5
+"Portal 2" 15
+"Payday 2" 20
+"Ori and the blind forest" 30
+"DOOM Eternal" 50
+"CS:GO" 0
+"FF7" 15
+"Age of mythology" 15
+"Age of empire" 10
+"Hollow Knight" 20
+"The Witcher 3" 30
+"Hunie Pop" 15
+"League of legends" 0
+"Overwatch" 30
+"Dark souls III" 50
+"1SUPER PREMIUM SEASON PASS" 5000
+
