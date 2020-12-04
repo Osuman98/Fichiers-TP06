@@ -63,16 +63,13 @@ unsigned int Utilisateur::getFonds() const
 
 void Utilisateur::acheterJeu(const Jeu* jeu)
 {
-    /////////////////////////
-
-
-
     if (jeu)
     {
         for (std::size_t i = 0; i < librairieJeux_.size(); ++i) {
-            if (librairieJeux_[i] == jeu) {
+            if (librairieJeux_[i] == jeu)
+            {
                 throw (JEU_DEJA_ACHETER);
-                break; // IS NECESARY?? TODO
+                break;
             }
 
             // Sera lance si le jeu n'est pas trouve TODO Laurent
@@ -83,7 +80,7 @@ void Utilisateur::acheterJeu(const Jeu* jeu)
                 emit fondsModifier(fonds_);
             }
 
-            else if (fonds_ < jeu->getPrix())
+            else if (i == librairieJeux_.size()-1 && fonds_ < jeu->getPrix())
             {
                 throw (FOND_INSUFFISANTS);
             }
@@ -95,8 +92,10 @@ void Utilisateur::vendreJeu(const Jeu* jeu)
 {
     if (jeu)
     {
-        for (std::size_t i = 0; i < librairieJeux_.size(); ++i) {
-            if (librairieJeux_[i] == jeu) {
+        for (std::size_t i = 0; i < librairieJeux_.size(); ++i)
+        {
+            if (librairieJeux_[i] == jeu)
+            {
                 librairieJeux_[i] = librairieJeux_[librairieJeux_.size() - 1];
                 librairieJeux_.pop_back();
                 fonds_ += jeu->getPrix() / 2;
@@ -104,7 +103,6 @@ void Utilisateur::vendreJeu(const Jeu* jeu)
                 break;
             }
 
-            // Sera lance si le jeu n'est pas trouve TODO Laurent
             else if (i == librairieJeux_.size()-1)
             {
                 throw (JEU_PAS_DANS_LIBRAIRIE);

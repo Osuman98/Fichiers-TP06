@@ -74,6 +74,9 @@ void MainWindow::etablirConnections() {
         this, SLOT(selectionnerJeuBoutique(QListWidgetItem*)));
 
     //todo implémenter tout les connect ici.
+    // connect(Object1, signal1, Object2, slot2)
+    connect(selectionnerJeuLibrairie(this), SIGNAL(clicked()), this );
+
 }
 
 
@@ -108,6 +111,7 @@ void MainWindow::setUI() {
     layoutNom->addWidget(editeurNomJeu_);
 
     //TODO  --- creer label du prix du jeu
+    QLabel* prix_ = new QLabel(this); //Abdel
 
     //on ne peut pas modifer le prix du jeu
     editeurPrixJeu_ = new QLineEdit;

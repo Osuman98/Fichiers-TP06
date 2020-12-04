@@ -18,6 +18,9 @@
 #include "ExceptionJeuDejaAcheter.h"
 #include "ExceptionJeuPasDansLaLibrairie.h"
 
+#define slots Q_SLOTS
+#define signals Q_SIGNALS
+
 class Utilisateur : public QObject
 {
 public:
@@ -33,9 +36,11 @@ public:
     unsigned int getFonds() const;
     std::vector<const Jeu*>& getJeux();
 
-    Q_SLOTS acheterJeu(const Jeu* jeu);
+public Q_SLOTS:
+    void acheterJeu(const Jeu* jeu);
     void vendreJeu(const Jeu* jeu);
 
+Q_SIGNALS:
     void fondsModifier(unsigned int nouveauFonds);
 
 private:
