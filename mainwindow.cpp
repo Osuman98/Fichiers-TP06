@@ -52,36 +52,79 @@ void MainWindow::chargerFonds(unsigned int nouveauFonds) {
     editeurFonds_->setText(QString::number(nouveauFonds));
 }
 
-void MainWindow::acheterJeu() {
+void MainWindow::acheterJeu() 
+{
     const Jeu* jeu = gestionnaire_->chercherJeu(editeurNomJeu_->text().toStdString());
-    utilisateur_->acheterJeu(jeu);
+    //utilisateur_->acheterJeu(jeu);
 
     //ajoute le jeu nouvellement acheter dans la vue
-    QListWidgetItem* item = new QListWidgetItem(QString::fromStdString(jeu->getNom()), librairieUtilisateur_);
-    item->setData(Qt::UserRole, QVariant::fromValue<const Jeu*>(jeu));
+
+    // Essaiera d'ajouter le jeu.  Une erreur pourra etre lancee
+    try 
+    {
+        utilisateur_->acheterJeu(jeu);
+
+        QListWidgetItem* item = new QListWidgetItem(QString::fromStdString(jeu->getNom()), librairieUtilisateur_);
+        item->setData(Qt::UserRole, QVariant::fromValue<const Jeu*>(jeu));
+    }
+
+    // On attrappe les erreurs lancees
+    catch (ExceptionJeuDejaAchete)
+    {
+        afficherMessage(JEU_DEJA_ACHETER);
+    }
+
+    catch (ExceptionFondsInsuffisant)
+    {
+        afficherMessage(FOND_INSUFFISANTS);
+    };
+
 }
 
-void MainWindow::vendreJeu() {
+void MainWindow::vendreJeu() 
+{
     const Jeu* jeu = gestionnaire_->chercherJeu(editeurNomJeu_->text().toStdString());
-    utilisateur_->vendreJeu(jeu);
+
+    try
+    {
+        utilisateur_->vendreJeu(jeu);
+        chargerJeuxLibrairie();
+    }
+    
+    catch(const QString JEU_PAS_DANS_LIBRAIRIE)
+    {
+        afficherMessage(JEU_PAS_DANS_LIBRAIRIE);
+    };
+    
+
     //retire le jeu de la librairie dans la vue.
-    chargerJeuxLibrairie();
+
 }
 
 void MainWindow::etablirConnections() {
-    //connect qui lie le click sur un jeu de la boutique avec laffichage des information de ce
-    connect(boutique_, SIGNAL(itemClicked(QListWidgetItem*)),
-        this, SLOT(selectionnerJeuBoutique(QListWidgetItem*)));
-
+    //connect qui lie le click sur un jeu de la boutique avec laffichage des information de ce jeu
+    connect(boutique_, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(selectionnerJeuBoutique(QListWidgetItem*)));
     //todo implémenter tout les connect ici.
-    // connect(Object1, signal1, Object2, slot2)
-    connect(selectionnerJeuLibrairie(this), SIGNAL(clicked()), this );
+
+    // Connect clic sur Librairie avec le SLOT selectionnerJeuLibrairie
+    connect(librairieUtilisateur_, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(selectionnerJeuLibrairie(QListWidgetItem*)));
+
+    
+    // Connect bouton acheter avec SLOT acheterJeu
+    connect(boutonAcheterJeu_, SIGNAL(clicked()), this, SLOT(acheterJeu()));
+
+    // Connect bouton vendre avec SLOT vendreJeu
+    connect(boutonVendreJeu_, SIGNAL(clicked()), this, SLOT(vendreJeu()));
+
+    //Connect signal emis par la class utilisateur lors d'un achat ou une vente avec le SLOT chargerFONDS
+    connect(this, SIGNAL(Utilisateur::fondsModifier(unsigned int)), this, SLOT(chargerFonds(unsigned int))); //Mdr j ai tlm freestyle;
 
 }
 
 
 
-void MainWindow::setUI() {
+void MainWindow::setUI()
+{
 
     //on commence par créer tout les objets de la vue et les initialiser
 
@@ -111,7 +154,8 @@ void MainWindow::setUI() {
     layoutNom->addWidget(editeurNomJeu_);
 
     //TODO  --- creer label du prix du jeu
-    QLabel* prix_ = new QLabel(this); //Abdel
+    QLabel* labelPrixJeu = new QLabel; //Abdel
+    labelPrixJeu->setText("Prix du Jeu : ");
 
     //on ne peut pas modifer le prix du jeu
     editeurPrixJeu_ = new QLineEdit;
@@ -119,13 +163,21 @@ void MainWindow::setUI() {
 
 #   //TODO --- remplir le layout pour avoir le nom et l'editeur sur une meme ligne.
     QHBoxLayout* layoutPrix = new QHBoxLayout;
+    layoutPrix->addWidget(labelPrixJeu);
+    layoutPrix->addWidget(editeurPrixJeu_);
 
     //TODO --- creer le bouton pour acheter le jeu
+    QPushButton* boutonAcheterJeu_ = new QPushButton(this); // Laurent
 
     //TODO --- creer le bouton pour vendre le jeu
+    QPushButton* boutonVendreJeu_ = new QPushButton(this); // Abdel
 
     //TODO --- remplir le layout pour que les boutons soient placer ensemble
     QHBoxLayout* layoutBoutons = new QHBoxLayout;
+    layoutBoutons->addWidget(boutonAcheterJeu_);
+    layoutBoutons->addWidget(boutonVendreJeu_);
+    //layoutBoutons->addWidget(acheterJeu);
+    //layoutBoutons->addWidget(vendreJeu);
 
     //ligne pour separer les information du jeu et la librairie de l'utilisateur.
     QFrame* horizontaleFrameLine = new QFrame;
@@ -165,7 +217,17 @@ void MainWindow::setUI() {
     // TODO --- Remplir le layout droite
     QVBoxLayout* layoutDroite = new QVBoxLayout;
     layoutDroite->addWidget(labelJeu);
-
+        // layoutDroite->addWidget(layoutNom);
+        // layoutDroite->addWidget(layoutPrix);
+        // layoutDroite->addWidget(layoutBoutons);
+    layoutDroite->addWidget(horizontaleFrameLine);
+        // layoutDroite->addWidget(layoutFonds);
+        // layoutDroite->addWidget(labelLibrairieUtilisateur_);
+        layoutDroite->addWidget(labelLibrairieUtilisateur);
+        layoutDroite->addLayout(layoutNom);
+        layoutDroite->addLayout(layoutPrix);
+        layoutDroite->addLayout(layoutBoutons);
+        layoutDroite->addLayout(layoutFonds);
 
     //main layout qui contient tout
     QHBoxLayout* mainLayout = new QHBoxLayout;

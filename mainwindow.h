@@ -15,7 +15,7 @@
 #include <QMessageBox>
 #include <QException>
 
-#include "DebogageMemoire.h"
+//#include "DebogageMemoire.h"
 #include "GestionnaireJeux.h"
 #include "Utilisateur.h"
 

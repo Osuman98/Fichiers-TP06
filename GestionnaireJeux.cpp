@@ -113,6 +113,7 @@ bool GestionnaireJeux::lireLigneJeu(const std::string& ligne)
     std::string nomJeu;
     unsigned int prixJeu;
 
+    //if (stream >> std::quoted(nomJeu) >> prixJeu)
     if (stream >> std::quoted(nomJeu) >> prixJeu)
     {
         *this += Jeu(nomJeu, prixJeu);

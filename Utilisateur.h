@@ -18,8 +18,8 @@
 #include "ExceptionJeuDejaAcheter.h"
 #include "ExceptionJeuPasDansLaLibrairie.h"
 
-#define slots Q_SLOTS
-#define signals Q_SIGNALS
+//#define slots Q_SLOTS
+//#define signals Q_SIGNALS
 
 class Utilisateur : public QObject
 {
